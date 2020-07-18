@@ -1,15 +1,20 @@
-use std::convert::TryInto; 
+use std::collections::HashMap;
+use std::convert::TryInto;
 
 fn main() {
-    let integers = vec![8, -3, 0, 8, 18, 2, -5, 8, 18, -5, 8, 18, 8, 0, 0, 0];
+    let integers = vec![-3, 0, 8, 18, 2, -5, 8, 18, -5, 8, 18, 8, 0, 0, 0];
 
-    println!("Sorting     {:?}", integers);
+    println!("Sorting             {:?}", integers);
 
     let mean = mean(&integers);
     let median = median(&integers);
 
+    let mut mode_vec = Vec::with_capacity(integers.len());
+    mode(&integers, &mut mode_vec);
+
     println!("Mean  : {}", mean);
     println!("Median: {}", median);
+    println!("Mode  : {:?}", mode_vec);
 }
 
 fn mean(integers: &Vec<i32>) -> f32 {
@@ -45,7 +50,7 @@ fn median(integers: &Vec<i32>) -> f32 {
         sorted_integers[x] = min;
     }
 
-    println!("Sorted list {:?}", sorted_integers);
+    println!("Sorted list         {:?}", sorted_integers);
 
     let median;
 
@@ -61,5 +66,35 @@ fn median(integers: &Vec<i32>) -> f32 {
     }
 
     return median;
+}
+
+fn mode(integers: &Vec<i32>, mode: &mut Vec<i32>) {
+    let mut integers_and_counts = HashMap::new();
+
+    for x in integers {
+        let count = integers_and_counts.entry(x).or_insert(0);
+        *count += 1;
+    }
+
+    println!("Hash map of numbers {:?}", integers_and_counts);
+
+    let mut max_count = 0;
+
+    for integer in integers_and_counts.keys() {
+        let count = integers_and_counts.get(integer);
+        match count {
+            None => None,
+            Some(i) => if Some(i) > Some(&max_count) { Some(max_count = *i) }
+                       else { None },
+        };
+    }
+
+    for integer in integers_and_counts.keys() {
+        let count = integers_and_counts.get(integer);
+        match count {
+            None => {},
+            Some(i) => if Some(i) == Some(&max_count) { mode.push(**integer) },
+        };
+    }
 }
 
