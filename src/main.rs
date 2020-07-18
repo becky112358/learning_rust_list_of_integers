@@ -33,6 +33,26 @@ fn mean(integers: &Vec<i32>) -> f32 {
 fn median(integers: &Vec<i32>) -> f32 {
 
     let mut sorted_integers = integers.clone();
+    sort_integers(integers, &mut sorted_integers);
+
+    let length = integers.len();
+    let median;
+
+    if (length % 2) == 1 {
+        let mid_index = (length - 1) / 2;
+        median = sorted_integers[mid_index] as f32;
+    }
+    else {
+        let mid_index = length / 2;
+        median = (sorted_integers[mid_index-1] as f32
+                + sorted_integers[mid_index] as f32)
+                / 2.0;
+    }
+
+    return median;
+}
+
+fn sort_integers(integers: &Vec<i32>, sorted_integers: &mut Vec<i32>) {
     let length = integers.len();
 
     for x in 0..length {
@@ -51,21 +71,6 @@ fn median(integers: &Vec<i32>) -> f32 {
     }
 
     println!("Sorted list         {:?}", sorted_integers);
-
-    let median;
-
-    if (length % 2) == 1 {
-        let mid_index = (length - 1) / 2;
-        median = sorted_integers[mid_index] as f32;
-    }
-    else {
-        let mid_index = length / 2;
-        median = (sorted_integers[mid_index-1] as f32
-                + sorted_integers[mid_index] as f32)
-                / 2.0;
-    }
-
-    return median;
 }
 
 fn mode(integers: &Vec<i32>, mode: &mut Vec<i32>) {
